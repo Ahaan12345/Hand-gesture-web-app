@@ -1,4 +1,4 @@
-var prediction = "victory";
+var prediction = "";
 
 Webcam.set({
     width: 350,
@@ -20,11 +20,10 @@ console.log("ml5 Version", ml5.version);
 
 console.log("ml5 Version:", ml5.version);
 
-classifier = ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/8H3a40Eb5/model.json',modelLoaded);
+classifier = ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/23OjhQjDs/model.json',modelLoaded);
 
 function modelLoaded() {
-    console.log("Model Loaded");
-    speak();
+console.log("Model Loaded");
 }
 
 function speak() {
@@ -32,4 +31,35 @@ function speak() {
     var speak_data = "The prediction is"+prediction;
     var utterThis = new SpeechSynthesisUtterance(speak_data);
     synth.speak(utterThis)
+}
+
+function check() {
+    img = document.getElementById("image_captured");
+    classifier.classify(img,gotResults);
+}
+
+function gotResults(error,results) {
+if(error){
+console.error(error);
+}
+else{
+    document.getElementById("result_gesture_name").innerHTML = result[0].label;
+    prediction = results[0].label;
+    speak()
+    if(results[0].label == "Amazing"){
+    document.getElementById("result_emoji").innerHTML = "&#128076";
+    document.getElementById("quote").innerHTML = "This is amazing";
+    }
+
+    else if(results[0].label == "Best"){
+    document.getElementById("result_emoji").innerHTML = "&#128077";
+    document.getElementById("quote").innerHTML = "All the best";
+    }
+
+    else(results[0].label == "Victory")
+    {
+    document.getElementById("result_emoji").innerHTML = "&#9996";
+    document.getElementById("quote").innerHTML = "That was a good victory";
+    }
+}
 }
